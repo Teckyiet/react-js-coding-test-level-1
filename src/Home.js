@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Home() {
   const [text, setText] = useState("");
@@ -17,7 +17,7 @@ function Home() {
   return (
     <div className='App'>
       <header className='App-header'>
-        <Link to='/pokedex'>
+        <NavLink to='/pokedex'>
           <img
             hidden={!isReady}
             src='https://www.freeiconspng.com/uploads/file-pokeball-png-0.png'
@@ -25,7 +25,7 @@ function Home() {
             alt='logo'
             style={{ padding: "10px" }}
           />
-        </Link>
+        </NavLink>
         <b>
           Requirement: Try to show the hidden image and make it clickable that
           goes to /pokedex when the input below is "Ready!" remember to hide the
