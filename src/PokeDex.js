@@ -23,6 +23,23 @@ function PokeDex() {
     overlay: { backgroundColor: "grey" },
   };
 
+  useEffect(()=>{
+    axios.get('/user', {
+      params: {
+        ID: 12345
+      }
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .then(function () {
+      // always executed
+    });
+  },[])
+
   if (!isLoading && pokemons.length === 0) {
     return (
       <div>
