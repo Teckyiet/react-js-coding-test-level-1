@@ -36,3 +36,45 @@
     transform: rotate(360deg);
   }
 }
+
+.ant-collapse-header:hover{
+  background: rgb(247, 247, 177);
+}
+
+.ant-collapse-header{
+  background: rgb(235, 235, 235);
+}
+
+.navigation_container{
+  width: min(95vw, 800px);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter_input{
+  display: flex;
+  align-items: center;
+  width: min(33vw, 150px)
+}
+
+.ant-select{
+  width: 100%!important;
+}
+
+.pokemon_filter_input{
+  color: black!important;
+  width: min(50vw, 240px);
+  margin: 20px 0;
+}
+
+.pagination{
+  margin: 20px 0;
+}
+
+@media only screen and (max-width:600px){
+  .dummy-box{
+    display: none;
+  }
+}

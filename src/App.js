@@ -1,6 +1,7 @@
+import 'antd/dist/antd.min.css';
 import "./App.css";
 import Home from "./Home";
-import { Route, NavLink, HashRouter } from "react-router-dom";
+import { Route, HashRouter } from "react-router-dom";
 import PokeDex from "./PokeDex";
 
 function App() {
