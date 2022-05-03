@@ -4,7 +4,13 @@ import ReactLoading from "react-loading";
 import axios from "axios";
 import Modal from "react-modal";
 import { Collapse, Pagination, Input, Select } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  SortAscendingOutlined,
+  RiseOutlined,
+  ToTopOutlined,
+  ColumnHeightOutlined,
+} from "@ant-design/icons";
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -16,7 +22,9 @@ function PokeDex() {
   const [pokemons, setPokemons] = useState([]);
   const [filterText, setFilterText] = useState("");
   const [pageSize, setPageSize] = useState(20);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPageStartingItem, setCurrentPageStartingItem] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortingMode, setSortingMode] = useState("byname");
 
   const [pokemonDetail, setPokemonDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +43,7 @@ function PokeDex() {
     overlay: { backgroundColor: "grey" },
   };
 
-  const totalPokemonsNumber = 1126;
+  const totalPokemonsNumber = 200;
 
   useEffect(() => {
     axios
@@ -67,16 +75,42 @@ function PokeDex() {
       return pokemon?.data?.name.includes(filterText);
     });
 
-    console.log(filteredPokes);
+    switch (sortingMode) {
+      case "byname":
+        filteredPokes.sort((a, b) => {
+          return a?.data?.name.localeCompare(b?.data?.name);
+        });
+        break;
+      case "baseexperience":
+        filteredPokes.sort((a, b) => {
+          return a?.data?.base_experience - b?.data?.base_experience;
+        });
+        break;
+      case "weight":
+        filteredPokes.sort((a, b) => {
+          return a?.data?.weight - b?.data?.weight;
+        });
+        break;
+      case "height":
+        filteredPokes.sort((a, b) => {
+          return a?.data?.height - b?.data?.height;
+        });
+        break;
+    }
 
-    //sortting mechanism
-
-    filteredPokes.sort((a, b) => {
-      return a?.data?.weight - b?.data?.weight;
-    });
-
-    setPokemons(filteredPokes.slice(currentPage, currentPage + pageSize));
-  }, [filterText, allPokemonsData, currentPage, pageSize]);
+    setPokemons(
+      filteredPokes.slice(
+        currentPageStartingItem,
+        currentPageStartingItem + pageSize,
+      ),
+    );
+  }, [
+    filterText,
+    allPokemonsData,
+    currentPageStartingItem,
+    pageSize,
+    sortingMode,
+  ]);
 
   // if (!isLoading && pokemons.length === 0) {
   //   return (
@@ -129,7 +163,7 @@ function PokeDex() {
         ) : (
           <>
             <h1 style={{ color: "white" }}>Welcome to pokedex!</h1>
-            <div className="navigation_container">
+            <div className='navigation_container'>
               <div className='filter_input dummy-box'></div>
               <Input
                 className='pokemon_filter_input'
@@ -137,17 +171,33 @@ function PokeDex() {
                 type='text'
                 prefix={<SearchOutlined />}
                 placeholder='Search pokemon'
-                onChange={(e) => setFilterText(e.target.value)}
+                onChange={(e) => {
+                  setFilterText(e.target.value);
+                  setCurrentPage(1);
+                  setCurrentPageStartingItem(0);
+                }}
               />
               <div className='filter_input'>
                 <Select
                   showSearch
+                  placeholder='Sort by'
                   onChange={(e) => {
-                    console.log(e);
+                    setSortingMode(e);
+                    setCurrentPage(1);
+                    setCurrentPageStartingItem(0);
                   }}>
-                  <Option value={123}>Sort 1</Option>
-                  <Option value={2}>Sort 2</Option>
-                  <Option value={3}>Sort 3</Option>
+                  <Option value='byname'>
+                    <SortAscendingOutlined /> By Name
+                  </Option>
+                  <Option value='baseexperience'>
+                    <ToTopOutlined /> Base Experience
+                  </Option>
+                  <Option value='height'>
+                    <ColumnHeightOutlined /> By Height
+                  </Option>
+                  <Option value='weight'>
+                    <RiseOutlined /> By Weight
+                  </Option>
                 </Select>
               </div>
             </div>
@@ -159,9 +209,9 @@ function PokeDex() {
                 <Panel
                   header={pokemon?.data?.name}
                   key={"panelkey" + pokemon?.data?.name}>
-                  <p>
+                  <div>
                     <img src={pokemon?.data?.sprites?.front_default} />
-                  </p>
+                  </div>
                 </Panel>
               </Collapse>
             ))}
@@ -171,9 +221,11 @@ function PokeDex() {
               total={totalPokemonsNumber}
               defaultPageSize={20}
               defaultCurrent={1}
+              current={currentPage}
               onChange={(page, pageSize) => {
+                setCurrentPage(page);
                 setPageSize(pageSize);
-                setCurrentPage((page - 1) * pageSize);
+                setCurrentPageStartingItem((page - 1) * pageSize);
               }}
             />
           </>
