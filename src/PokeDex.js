@@ -2,8 +2,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import axios from "axios";
-import Modal from "react-modal";
-import { Collapse, Pagination, Input, Select } from "antd";
+import { Collapse, Pagination, Input, Select, Row, Col, Tag } from "antd";
 import {
   SearchOutlined,
   SortAscendingOutlined,
@@ -43,7 +42,7 @@ function PokeDex() {
     overlay: { backgroundColor: "grey" },
   };
 
-  const totalPokemonsNumber = 200;
+  const totalPokemonsNumber = 1000;
 
   useEffect(() => {
     axios
@@ -98,6 +97,8 @@ function PokeDex() {
         break;
     }
 
+    console.log(filteredPokes);
+
     setPokemons(
       filteredPokes.slice(
         currentPageStartingItem,
@@ -111,6 +112,65 @@ function PokeDex() {
     pageSize,
     sortingMode,
   ]);
+
+  const typesChecker = (pokemonType) => {
+    switch (pokemonType) {
+      case "bug":
+        return "#a8b820";
+        break;
+      case "dark":
+        return "#705848";
+        break;
+      case "dragon":
+        return "#7038f8";
+        break;
+      case "electric":
+        return "#f8d030";
+        break;
+      case "fairy":
+        return "#ee99ac";
+        break;
+      case "fighting":
+        return "#c03028";
+        break;
+      case "fire":
+        return "#f08030";
+        break;
+      case "flying":
+        return "#a890f0";
+        break;
+      case "ghost":
+        return "#705898";
+        break;
+      case "grass":
+        return "#78c850";
+        break;
+      case "ground":
+        return "#e0c068";
+        break;
+      case "ice":
+        return "#98d8d8";
+        break;
+      case "normal":
+        return "#a8a878";
+        break;
+      case "poison":
+        return "#a040a0";
+        break;
+      case "psychic":
+        return "#f85888";
+        break;
+      case "rock":
+        return "#b8a038";
+        break;
+      case "steel":
+        return "#b8b8d0";
+        break;
+      case "water":
+        return "#6890f0";
+        break;
+    }
+  };
 
   // if (!isLoading && pokemons.length === 0) {
   //   return (
@@ -210,7 +270,28 @@ function PokeDex() {
                   header={pokemon?.data?.name}
                   key={"panelkey" + pokemon?.data?.name}>
                   <div>
-                    <img src={pokemon?.data?.sprites?.front_default} />
+                    <Row>
+                      <Col span={5}>
+                        <div className='pokemon-identity-wrapper'>
+                          <Row>
+                            <img
+                              src={pokemon?.data?.sprites?.front_default}
+                              style={{ marginBottom: 6 }}
+                            />
+                          </Row>
+                          <Row>
+                            {pokemon?.data?.types.map((eachType) => (
+                              <Tag color={typesChecker(eachType?.type?.name)}>
+                                {eachType?.type?.name}
+                              </Tag>
+                            ))}
+                          </Row>
+                        </div>
+                      </Col>
+                      <Col span={19}>
+                        <div>Somehting</div>
+                      </Col>
+                    </Row>
                   </div>
                 </Panel>
               </Collapse>
