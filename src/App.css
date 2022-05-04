@@ -46,7 +46,7 @@
 }
 
 .navigation_container{
-  width: min(95vw, 800px);
+  width: min(95vw, 1000px);
   height: 80px;
   display: flex;
   align-items: center;

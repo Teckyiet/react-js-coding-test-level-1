@@ -2,7 +2,16 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import axios from "axios";
-import { Collapse, Pagination, Input, Select, Row, Col, Tag } from "antd";
+import {
+  Collapse,
+  Pagination,
+  Input,
+  Select,
+  Row,
+  Col,
+  Tag,
+  Table,
+} from "antd";
 import {
   SearchOutlined,
   SortAscendingOutlined,
@@ -10,9 +19,12 @@ import {
   ToTopOutlined,
   ColumnHeightOutlined,
 } from "@ant-design/icons";
+import { Bar } from "react-chartjs-2";
+import { Chart } from "chart.js/auto";
 
 const { Panel } = Collapse;
 const { Option } = Select;
+const { Column } = Table;
 
 const baseUrl = "https://pokeapi.co/api/v2/pokemon";
 
@@ -42,7 +54,7 @@ function PokeDex() {
     overlay: { backgroundColor: "grey" },
   };
 
-  const totalPokemonsNumber = 200;
+  const totalPokemonsNumber = 100;
 
   useEffect(() => {
     axios
@@ -264,14 +276,14 @@ function PokeDex() {
             {pokemons.map((pokemon) => (
               <Collapse
                 accordion
-                style={{ width: "min(95vw, 800px)" }}
+                style={{ width: "min(95vw, 1000px)" }}
                 key={"collapse" + pokemon?.data?.name}>
                 <Panel
                   header={pokemon?.data?.name.toUpperCase()}
                   key={"panelkey" + pokemon?.data?.name}>
                   <div>
                     <Row>
-                      <Col span={5}>
+                      <Col md={3} xs={6}>
                         <div className='pokemon-identity-wrapper'>
                           <Row>
                             <img
@@ -281,15 +293,110 @@ function PokeDex() {
                           </Row>
                           <Row>
                             {pokemon?.data?.types.map((eachType) => (
-                              <Tag color={typesChecker(eachType?.type?.name)}>
+                              <Tag
+                                style={{ marginTop: 4 }}
+                                key={pokemon?.data?.name + eachType?.type?.name}
+                                color={typesChecker(eachType?.type?.name)}>
                                 {eachType?.type?.name}
                               </Tag>
                             ))}
                           </Row>
                         </div>
                       </Col>
-                      <Col span={19}>
-                        <div>Somehting</div>
+                      <Col md={7} xs={17} offset={1}>
+                        <div style={{ marginBottom: 16 }}>
+                          <Table
+                            pagination={false}
+                            size='small'
+                            dataSource={[
+                              {
+                                key:
+                                  pokemon?.data?.name +
+                                  pokemon?.data?.stats[0]?.stat?.name,
+                                statsName: pokemon?.data?.stats[0]?.stat?.name,
+                                baseValue: pokemon?.data?.stats[0]?.base_stat,
+                              },
+                              {
+                                key:
+                                  pokemon?.data?.name +
+                                  pokemon?.data?.stats[1]?.stat?.name,
+                                statsName: pokemon?.data?.stats[1]?.stat?.name,
+                                baseValue: pokemon?.data?.stats[1]?.base_stat,
+                              },
+                              {
+                                key:
+                                  pokemon?.data?.name +
+                                  pokemon?.data?.stats[2]?.stat?.name,
+                                statsName: pokemon?.data?.stats[2]?.stat?.name,
+                                baseValue: pokemon?.data?.stats[2]?.base_stat,
+                              },
+                              {
+                                key:
+                                  pokemon?.data?.name +
+                                  pokemon?.data?.stats[3]?.stat?.name,
+                                statsName: pokemon?.data?.stats[3]?.stat?.name,
+                                baseValue: pokemon?.data?.stats[3]?.base_stat,
+                              },
+                              {
+                                key:
+                                  pokemon?.data?.name +
+                                  pokemon?.data?.stats[4]?.stat?.name,
+                                statsName: pokemon?.data?.stats[4]?.stat?.name,
+                                baseValue: pokemon?.data?.stats[4]?.base_stat,
+                              },
+                              {
+                                key:
+                                  pokemon?.data?.name +
+                                  pokemon?.data?.stats[5]?.stat?.name,
+                                statsName: pokemon?.data?.stats[5]?.stat?.name,
+                                baseValue: pokemon?.data?.stats[5]?.base_stat,
+                              },
+                            ]}>
+                            <Column title='Stat Name' dataIndex='statsName' />
+                            <Column title='Base Value' dataIndex='baseValue' />
+                          </Table>
+                        </div>
+                      </Col>
+                      <Col md={12} xs={24} offset={1}>
+                        <Row>
+                          <Col span={24}>
+                            <Bar
+                              options={{
+                                aspectRatio: 1.6,
+                                indexAxis: "y",
+                                elements: {
+                                  bar: {
+                                    borderWidth: 2,
+                                  },
+                                },
+                                scales: {
+                                  xAxes: {
+                                    ticks: {
+                                      autoSkip: false,
+                                      source: "data",
+                                    },
+                                  },
+                                },
+                              }}
+                              data={{
+                                labels: pokemon?.data?.stats.map(
+                                  (eachStat) => eachStat?.stat?.name,
+                                ),
+                                datasets: [
+                                  {
+                                    label: "Base Stats",
+                                    data: pokemon?.data?.stats.map(
+                                      (eachStat) => eachStat?.base_stat,
+                                    ),
+                                  },
+                                ],
+                              }}
+                            />
+                          </Col>
+                        </Row>
+                        <Row justify='end' style={{ marginTop: 16 }}>
+                          <button>Download</button>
+                        </Row>
                       </Col>
                     </Row>
                   </div>
