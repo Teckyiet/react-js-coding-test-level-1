@@ -357,12 +357,12 @@ function PokeDex() {
                           </Table>
                         </div>
                       </Col>
-                      <Col md={12} xs={24} offset={1}>
+                      <Col md={12} xs={23} offset={1}>
                         <Row>
                           <Col span={24}>
                             <Bar
                               options={{
-                                aspectRatio: 1.6,
+                                aspectRatio: 1.5,
                                 indexAxis: "y",
                                 elements: {
                                   bar: {
