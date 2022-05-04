@@ -42,7 +42,7 @@ function PokeDex() {
     overlay: { backgroundColor: "grey" },
   };
 
-  const totalPokemonsNumber = 1000;
+  const totalPokemonsNumber = 200;
 
   useEffect(() => {
     axios
@@ -267,7 +267,7 @@ function PokeDex() {
                 style={{ width: "min(95vw, 800px)" }}
                 key={"collapse" + pokemon?.data?.name}>
                 <Panel
-                  header={pokemon?.data?.name}
+                  header={pokemon?.data?.name.toUpperCase()}
                   key={"panelkey" + pokemon?.data?.name}>
                   <div>
                     <Row>
