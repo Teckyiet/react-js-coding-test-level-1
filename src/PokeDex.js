@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import axios from "axios";
 import {
@@ -56,7 +56,7 @@ function PokeDex() {
     overlay: { backgroundColor: "grey" },
   };
 
-  const totalPokemonsNumber = 100;
+  const totalPokemonsNumber = 1126;
 
   useEffect(() => {
     axios
@@ -111,8 +111,6 @@ function PokeDex() {
         break;
     }
 
-    console.log(filteredPokes);
-
     setPokemons(
       filteredPokes.slice(
         currentPageStartingItem,
@@ -127,6 +125,7 @@ function PokeDex() {
     sortingMode,
   ]);
 
+  //Tag color based on pokemon type(s)
   const typesChecker = (pokemonType) => {
     switch (pokemonType) {
       case "bug":
@@ -219,16 +218,17 @@ function PokeDex() {
   // }
 
   const handlePrint = (divClassName, picture) => {
-    html2canvas(document.querySelector(`.${divClassName}`)).then((canvas) => {
-      document.body.appendChild(canvas); // if you want see your screenshot in body.
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("l", "px", "a4", "false");
-      pdf.addImage(imgData, "PNG", 41, 20);
-      const img = new Image();
-      img.src = picture;
-      pdf.addImage(img, "PNG", 50, 55);
-      pdf.save("download.pdf");
-    });
+    html2canvas(document.querySelector(`.${divClassName}Container`)).then(
+      (canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("l", "px", "a4", "false");
+        pdf.addImage(imgData, "PNG", 41, 20);
+        const img = new Image();
+        img.src = picture;
+        pdf.addImage(img, "PNG", 50, 55);
+        pdf.save(`${divClassName}.pdf`);
+      },
+    );
   };
 
   return (
@@ -414,11 +414,11 @@ function PokeDex() {
                           <button
                             onClick={() =>
                               handlePrint(
-                                pokemon?.data?.name + "Container",
+                                pokemon?.data?.name,
                                 pokemon?.data?.sprites?.front_default,
                               )
                             }>
-                            Download
+                            Save as pdf
                           </button>
                         </Row>
                       </Col>
