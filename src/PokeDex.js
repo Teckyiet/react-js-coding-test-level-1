@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactLoading from "react-loading";
 import axios from "axios";
 import {
@@ -21,6 +21,8 @@ import {
 } from "@ant-design/icons";
 import { Bar } from "react-chartjs-2";
 import { Chart } from "chart.js/auto";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -216,6 +218,19 @@ function PokeDex() {
   //   );
   // }
 
+  const handlePrint = (divClassName, picture) => {
+    html2canvas(document.querySelector(`.${divClassName}`)).then((canvas) => {
+      document.body.appendChild(canvas); // if you want see your screenshot in body.
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("l", "px", "a4", "false");
+      pdf.addImage(imgData, "PNG", 41, 20);
+      const img = new Image();
+      img.src = picture;
+      pdf.addImage(img, "PNG", 50, 55);
+      pdf.save("download.pdf");
+    });
+  };
+
   return (
     <div>
       <header className='App-header'>
@@ -275,6 +290,7 @@ function PokeDex() {
             </div>
             {pokemons.map((pokemon) => (
               <Collapse
+                className={pokemon?.data?.name + "Container"}
                 accordion
                 style={{ width: "min(95vw, 1000px)" }}
                 key={"collapse" + pokemon?.data?.name}>
@@ -395,7 +411,15 @@ function PokeDex() {
                           </Col>
                         </Row>
                         <Row justify='end' style={{ marginTop: 16 }}>
-                          <button>Download</button>
+                          <button
+                            onClick={() =>
+                              handlePrint(
+                                pokemon?.data?.name + "Container",
+                                pokemon?.data?.sprites?.front_default,
+                              )
+                            }>
+                            Download
+                          </button>
                         </Row>
                       </Col>
                     </Row>
