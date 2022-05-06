@@ -73,11 +73,6 @@
   margin: 20px 0;
 }
 
-/* .pokemon-identity-wrapper{
-  display: flex;
-  flex-direction: column;
-} */
-
 @media only screen and (max-width:600px){
   .dummy-box{
     display: none;
