@@ -2,6 +2,7 @@
   "name": "react-live-coding-test",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://Teckyiet.github.io/pokedex.gh.io",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -18,10 +19,12 @@
     "react-loading": "^2.0.3",
     "react-modal": "^3.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "^2.1.3",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

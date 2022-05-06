@@ -33,12 +33,19 @@ function Home() {
         </b>
         <p>Are you ready to be a pokemon master?</p>
         <input
+<<<<<<< HEAD
           style={{color: 'black'}}
+=======
+>>>>>>> 4706d0e2b92cb299312b4a4c8cfd15f9f2b55b12
           type='text'
           name='name'
           onChange={(e) => setText(e.target.value)}
         />
+<<<<<<< HEAD
         {!isReady && <span style={{ color: "red" }}>I am not ready yet!</span>}
+=======
+        <span style={{ color: "red" }}>I am not ready yet!</span>
+>>>>>>> 4706d0e2b92cb299312b4a4c8cfd15f9f2b55b12
       </header>
     </div>
   );
